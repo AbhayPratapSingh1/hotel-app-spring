@@ -9,12 +9,14 @@ import java.util.Objects;
 public final class Booking {
     @Id
     private final String id;
+    private final String userId;
     private final String hotelId;
     private final String hotel;
     private final int roomCount;
 
-    public Booking(String id, String hotelId, String hotel, int roomCount) {
+    public Booking(String id, String userId, String hotelId, String hotel, int roomCount) {
         this.id = id;
+        this.userId = userId;
         this.hotelId = hotelId;
         this.hotel = hotel;
         this.roomCount = roomCount;
@@ -54,11 +56,19 @@ public final class Booking {
 
     @Override
     public String toString() {
-        return "Booking[" +
-                "id=" + id + ", " +
-                "hotelId=" + hotelId + ", " +
-                "hotel=" + hotel + ", " +
-                "roomCount=" + roomCount + ']';
+        return "Booking\n" +
+                "id        = " + id +
+                "\nhotelId   = " + hotelId +
+                "\nhotel     = " + hotel +
+                "\nroomCount = " + roomCount;
     }
 
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public BookingView view() {
+        return new BookingView(this.id, this.userId, this.roomCount, this.hotel);
+    }
 }

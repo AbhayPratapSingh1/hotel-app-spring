@@ -1,7 +1,7 @@
 package com.hotel.app.services;
 
 import com.hotel.app.model.Hotel;
-import com.hotel.app.views.Booking;
+import com.hotel.app.views.BookingView;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ public interface HotelService {
 
     List<Hotel> listHotelsWithCityName(String city);
 
-    List<Booking> listBookings(String userId);
+    List<BookingView> listBookings(String userId);
 
 
-    Booking bookHotel(String userId, String hotelId, int rooms);
+    BookingView bookHotel(String userId, String hotelId, int rooms);
 
     byte[] getReceiptData(String bookingId, String userId);
 
