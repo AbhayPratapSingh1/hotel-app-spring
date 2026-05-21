@@ -40,12 +40,25 @@ class HotelControllerTest {
     }
 
     @Test
-    void listHotelsShouldReturnListOfTheHotelsOfTheHotel() {
+    void listHotelsShouldReturnListOfTheHotelsOfTheCityIfProvided() {
         Hotel hotel = new Hotel("1","Taj", "New York", 10);
         when(bookingService.listHotelsWithCityName(anyString())).thenReturn(List.of(hotel));
 
         client.get()
                 .uri("/api/search/hotels?city=New%20York")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(List.class)
+                .returnResult();
+    }
+
+    @Test
+    void listHotelsShouldReturnListOfAllTheHotelsIfCityNotProvided() {
+        Hotel hotel = new Hotel("1","Taj", "New York", 10);
+        when(bookingService.listHotels()).thenReturn(List.of(hotel));
+
+        client.get()
+                .uri("/api/search/hotels")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class)

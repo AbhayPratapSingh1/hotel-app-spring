@@ -26,7 +26,11 @@ public class HotelController {
     }
 
     @GetMapping("/search/hotels")
-    public ResponseEntity<?> ListHotelsOfCity(@RequestParam String city) {
+    public ResponseEntity<?> ListHotelsOfCity(@RequestParam(required = false) String city) {
+        if(city == null){
+            return ResponseEntity.ok(hotelService.listHotels());
+        }
+
         List<Hotel> hotels = hotelService.listHotelsWithCityName(city);
         return ResponseEntity.ok(hotels);
     }
