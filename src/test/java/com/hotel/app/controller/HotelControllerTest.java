@@ -1,6 +1,8 @@
 package com.hotel.app.controller;
 
-import com.hotel.app.model.Hotel;import com.hotel.app.views.Booking;
+import com.hotel.app.model.Hotel;
+import com.hotel.app.services.IdGenerator;
+import com.hotel.app.views.Booking;
 import com.hotel.app.services.HotelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +21,23 @@ import static org.mockito.Mockito.when;
 @AutoConfigureRestTestClient
 class HotelControllerTest {
 
+
+
     @Autowired
     private RestTestClient client;
 
     @MockitoBean
     private HotelService bookingService;
 
+    @MockitoBean
+    private IdGenerator idGenerator;
+
     @Test
     void listBookingsShouldReturnListOfBookings() {
-        Booking booking = new Booking("1","hotel", 1);
+
+        when(idGenerator.generate()).thenReturn("1", "2", "3");
+
+        Booking booking = new Booking("1","1","hotel", 1);
 
         when(bookingService.listBookings("1")).thenReturn(List.of(booking));
 
