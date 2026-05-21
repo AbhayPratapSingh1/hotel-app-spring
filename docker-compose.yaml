@@ -1,17 +1,26 @@
 services:
   hotel-app:
     build: .
-    ports:
-      - "8080:8080"
-    deploy:
-      replicas: 1
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - mongo-data:/data/db
 
   nginx:
     image: nginx:alpine
-    container_name: nginix-server
+    container_name: nginx-server
     ports:
       - "3000:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/nginix.conf
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - hotel-app
+
+volumes:
+  mongo-data:
