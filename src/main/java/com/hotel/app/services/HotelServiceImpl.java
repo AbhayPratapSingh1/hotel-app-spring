@@ -1,6 +1,6 @@
 package com.hotel.app.services;
 
-import com.hotel.app.Repository.HotelRepo;
+import com.hotel.app.repository.HotelRepo;
 import com.hotel.app.model.Hotel;
 import com.hotel.app.views.Booking;
 import org.springframework.stereotype.Service;

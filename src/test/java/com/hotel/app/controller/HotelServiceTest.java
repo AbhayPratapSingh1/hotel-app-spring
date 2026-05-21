@@ -1,6 +1,6 @@
 package com.hotel.app.controller;
 
-import com.hotel.app.Repository.HotelRepo;
+import com.hotel.app.repository.HotelRepo;
 import com.hotel.app.model.Hotel;
 import com.hotel.app.services.HotelServiceImpl;
 import com.hotel.app.services.IdGenerator;
@@ -20,8 +20,6 @@ import static org.mockito.Mockito.when;
 @DataMongoTest
 @SpringBootTest
 class HotelServiceImplTest {
-
-
     @MockitoBean
     private HotelRepo hotelRepo;
 

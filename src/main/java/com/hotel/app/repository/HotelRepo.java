@@ -1,4 +1,4 @@
-package com.hotel.app.Repository;
+package com.hotel.app.repository;
 
 import com.hotel.app.model.Hotel;
 import org.springframework.data.mongodb.repository.MongoRepository;
