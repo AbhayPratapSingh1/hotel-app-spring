@@ -17,8 +17,8 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<Hotel> listHotels() {
         return List.of(
-                new Hotel("1", "Taj","New York", 10),
-                new Hotel("2", "Shrinivasna", "India", 20)
+                new Hotel(1, "Taj","New York", 10),
+                new Hotel(2, "Shrinivasna", "India", 20)
         );
     }
 
@@ -31,10 +31,11 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<Booking> listBookings(String userId) {
-        return List.of(new Booking(idGenerator.generate(),"1", "Taj", 10));
+        return List.of(new Booking(idGenerator.generate(),1, "Taj", 10));
     }
+
     @Override
-    public Booking bookHotel(String hotelId, int roomsCount) {
+    public Booking bookHotel(String userId, int hotelId, int roomsCount) {
         List<Hotel> hotels = listHotels();
         Hotel hotel = hotels.stream().filter(h -> h.matchId(hotelId)).toList().get(0);
         return new Booking(idGenerator.generate(),hotelId, hotel.getName(), roomsCount);

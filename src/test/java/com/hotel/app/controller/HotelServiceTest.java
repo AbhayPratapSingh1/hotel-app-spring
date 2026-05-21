@@ -33,8 +33,8 @@ class HotelServiceImplTest {
 
         List<Hotel> hotels = hotelService.listHotels();
         List<Hotel> expectedHotels = List.of(
-                new Hotel("1", "Taj","New York", 10),
-                new Hotel("2", "Shrinivasna", "India", 20)
+                new Hotel(1, "Taj","New York", 10),
+                new Hotel(2, "Shrinivasna", "India", 20)
         );
 
         assertEquals(expectedHotels, hotels);
@@ -48,7 +48,7 @@ class HotelServiceImplTest {
         HotelServiceImpl hotelService = new HotelServiceImpl(idGenerator);
         String userId = "1";
         List<Booking> bookings = hotelService.listBookings(userId);
-        List<Booking> expectedHotels = List.of(new Booking("1","1", "Taj", 10));
+        List<Booking> expectedHotels = List.of(new Booking("1",1, "Taj", 10));
 
         assertEquals(expectedHotels,bookings);
     }
@@ -62,7 +62,7 @@ class HotelServiceImplTest {
         HotelServiceImpl hotelService = new HotelServiceImpl(idGenerator);
         List<Hotel> hotels = hotelService.listHotelsWithCityName("New York");
         List<Hotel> expectedHotels = List.of(
-                new Hotel("1", "Taj","New York", 10)
+                new Hotel(1, "Taj","New York", 10)
         );
 
         assertEquals(expectedHotels,hotels);
@@ -75,8 +75,8 @@ class HotelServiceImplTest {
 
         HotelServiceImpl hotelService = new HotelServiceImpl(idGenerator);
 
-        Booking booking = hotelService.bookHotel("1", 1);
-        Booking expected = new Booking("1","1", "Taj", 1);
+        Booking booking = hotelService.bookHotel("1",1, 1);
+        Booking expected = new Booking("1",1, "Taj", 1);
 
         assertEquals(expected, booking);
     }
