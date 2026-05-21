@@ -1,5 +1,6 @@
 package com.hotel.app.controller;
 
+import com.hotel.app.execptions.InvalidCredential;
 import com.hotel.app.services.AuthService;
 import com.hotel.app.views.RegisterRequest;
 import com.hotel.app.views.UserDetails;
@@ -24,8 +25,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody loginRequest loginRequest, HttpServletResponse response) {
-        UserDetails userDetails = authService.validate(loginRequest);
-        if(userDetails == null) return ResponseEntity.status(401).build();
+        UserDetails userDetails = null;
+        try {
+            userDetails = authService.validate(loginRequest);
+        } catch (InvalidCredential e) {
+            return ResponseEntity.status(401).build();
+        }
+
         Cookie sessionId = new Cookie("sessionId", userDetails.username());
         response.addCookie(sessionId);
         return ResponseEntity.ok("Logged in successfully");

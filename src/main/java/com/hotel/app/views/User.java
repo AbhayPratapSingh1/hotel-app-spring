@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class User{
+public class User {
     @Id
     private final String id;
     private final String username;
@@ -18,5 +18,9 @@ public class User{
 
     public UserDetails details() {
        return new UserDetails(id, username);
+    }
+
+    public boolean validate(String password) {
+        return password.equals(this.password);
     }
 }

@@ -1,10 +1,12 @@
 package com.hotel.app.services;
 
+import com.hotel.app.execptions.InvalidCredential;
 import com.hotel.app.repository.UserRepository;
 import com.hotel.app.views.RegisterRequest;
 import com.hotel.app.views.User;
 import com.hotel.app.views.UserDetails;
 import com.hotel.app.views.loginRequest;
+import org.apache.tomcat.util.net.openssl.ciphers.Encryption;
 import org.springframework.stereotype.Service;
 
 
@@ -19,14 +21,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDetails validate(loginRequest loginRequest) {
+    public UserDetails validate(loginRequest loginRequest) throws InvalidCredential {
+        User user = userRepository.findUserByUsername(loginRequest.username());
+        boolean valid = user.validate(loginRequest.password());
+        if(!valid) throw new InvalidCredential("Password and username did not match");
         return new UserDetails("2",loginRequest.username());
     }
 
     @Override
     public UserDetails addUser(RegisterRequest registerRequest) {
-        User userToRegister = new User(idGenerator.generate(), registerRequest.username(), registerRequest.password());
+        String password = registerRequest.password();
+        User userToRegister = new User(idGenerator.generate(), registerRequest.username(), password);
         User user = userRepository.save(userToRegister);
-        return UserDetails.of(user);
+        return user.details();
     }
 }
