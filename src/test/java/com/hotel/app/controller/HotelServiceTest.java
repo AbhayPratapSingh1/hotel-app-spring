@@ -1,5 +1,6 @@
 package com.hotel.app.controller;
 
+import com.hotel.app.Repository.HotelRepo;
 import com.hotel.app.model.Hotel;
 import com.hotel.app.services.HotelServiceImpl;
 import com.hotel.app.services.IdGenerator;
@@ -7,6 +8,7 @@ import com.hotel.app.views.Booking;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -15,15 +17,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
+@DataMongoTest
 @SpringBootTest
 class HotelServiceImplTest {
+
+
+    @MockitoBean
+    private HotelRepo hotelRepo;
 
     @MockitoBean
     private IdGenerator idGenerator;
 
     @Autowired
     private HotelServiceImpl hotelService;
-
 
 
     @Test
@@ -45,7 +51,7 @@ class HotelServiceImplTest {
     void listBookings() {
         when(idGenerator.generate()).thenReturn("1", "2", "3");
 
-        HotelServiceImpl hotelService = new HotelServiceImpl(idGenerator);
+
         String userId = "1";
         List<Booking> bookings = hotelService.listBookings(userId);
         List<Booking> expectedHotels = List.of(new Booking("1",1, "Taj", 10));
@@ -59,7 +65,6 @@ class HotelServiceImplTest {
     void listSearchedHotels() {
         when(idGenerator.generate()).thenReturn("1", "2", "3");
 
-        HotelServiceImpl hotelService = new HotelServiceImpl(idGenerator);
         List<Hotel> hotels = hotelService.listHotelsWithCityName("New York");
         List<Hotel> expectedHotels = List.of(
                 new Hotel(1, "Taj","New York", 10)
@@ -72,8 +77,6 @@ class HotelServiceImplTest {
     @Description("Should return the Hotel with status when hotel is booked ")
     void bookHotel() {
         when(idGenerator.generate()).thenReturn("1", "2", "3");
-
-        HotelServiceImpl hotelService = new HotelServiceImpl(idGenerator);
 
         Booking booking = hotelService.bookHotel("1",1, 1);
         Booking expected = new Booking("1",1, "Taj", 1);

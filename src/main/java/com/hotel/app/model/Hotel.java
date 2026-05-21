@@ -1,8 +1,13 @@
 package com.hotel.app.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Objects;
 
+@Document
 public class Hotel {
+    @Id
     private final int hotelId;
     private final String name;
     private final String city;
