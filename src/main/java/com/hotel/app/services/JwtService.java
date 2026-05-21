@@ -25,12 +25,6 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    @PostConstruct
-    public void debug() {
-        System.out.println("SECRET = " + secret);
-        System.out.println("EXPIRATION = " + expiration);
-    }
-
     public  String generateToken(String username){
         return Jwts.builder()
                 .subject(username)
