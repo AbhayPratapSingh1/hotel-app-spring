@@ -1,8 +1,7 @@
-package com.hotel.app;
+package com.hotel.app.controller;
 
 import com.hotel.app.views.Booking;
-import com.hotel.app.views.BookingsView;
-import com.hotel.services.BookingService;
+import com.hotel.app.services.HotelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,16 +13,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class HotelController {
 
-    private final BookingService bookingService;
+    private final HotelService bookingService;
 
-    public HotelController(BookingService bookingService) {
+    public HotelController(HotelService bookingService) {
         this.bookingService = bookingService;
     }
 
     @GetMapping("/bookings")
     public ResponseEntity<?> listBookings() {
         String userId = "1";
-        BookingsView bookings = bookingService.listBookings(userId);
+        List<Booking> bookings = bookingService.listBookings(userId);
         return ResponseEntity.ok(bookings);
     }
 }

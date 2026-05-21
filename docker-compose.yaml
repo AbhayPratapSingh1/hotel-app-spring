@@ -1,0 +1,17 @@
+services:
+  hotel-app:
+    build: .
+    ports:
+      - "8080:8080"
+    deploy:
+      replicas: 1
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginix-server
+    ports:
+      - "3000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/nginix.conf
+    depends_on:
+      - hotel-app

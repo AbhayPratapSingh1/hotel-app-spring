@@ -1,8 +1,7 @@
-package com.hotel.app;
+package com.hotel.app.controller;
 
 import com.hotel.app.views.Booking;
-import com.hotel.app.views.BookingsView;
-import com.hotel.services.BookingService;
+import com.hotel.app.services.HotelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -24,22 +23,19 @@ class HotelControllerTest {
     private RestTestClient client;
 
     @MockitoBean
-    private BookingService bookingService;
+    private HotelService bookingService;
 
     @Test
     void listBookingsShouldReturnListOfBookings() {
-        Booking booking = new Booking("hotel", 1);
-        BookingsView bookingsView = new BookingsView();
-        bookingsView.add(booking);
-        when(bookingService.listBookings("1")).thenReturn(bookingsView);
+        Booking booking = new Booking("1","hotel", 1);
 
-        List<Booking> responseBody = client.get()
+        when(bookingService.listBookings("1")).thenReturn(List.of(booking));
+
+        client.get()
                 .uri("/api/bookings")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class)
-                .returnResult()
-                .getResponseBody();
-
+                .returnResult();
     }
 }
