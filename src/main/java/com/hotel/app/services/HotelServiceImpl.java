@@ -12,6 +12,7 @@ public class HotelServiceImpl implements HotelService {
 
 
     public List<Hotel> listHotels() {
+
         return List.of(
                 new Hotel("1", "Taj","New York", 10),
                 new Hotel("2", "Shrinivasna", "India", 20)
@@ -28,5 +29,11 @@ public class HotelServiceImpl implements HotelService {
 
         return hotels.stream().filter(h -> h.matchCity(s)).toList();
 
+    }
+
+    public Booking bookHotel(String hotelId, int roomsCount) {
+        List<Hotel> hotels = listHotels();
+        Hotel hotel = hotels.stream().filter(h -> h.matchId(hotelId)).toList().get(0);
+        return new Booking(hotelId, hotel.getName(), roomsCount);
     }
 }

@@ -21,7 +21,7 @@ class HotelServiceImplTest {
                 new Hotel("2", "Shrinivasna", "India", 20)
         );
 
-        assertEquals(expectedHotels,hotels);
+        assertEquals(expectedHotels, hotels);
     }
 
     @Test
@@ -47,4 +47,16 @@ class HotelServiceImplTest {
 
         assertEquals(expectedHotels,hotels);
     }
+
+    @Test
+    @Description("Should return the Hotel with status when hotel is booked ")
+    void bookHotel() {
+        HotelServiceImpl hotelService = new HotelServiceImpl();
+        Booking booking = hotelService.bookHotel("1", 1);
+        Booking expected = new Booking("1", "Taj", 1);
+
+        assertEquals(expected, booking);
+    }
+
 }
+
