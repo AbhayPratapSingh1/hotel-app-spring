@@ -6,6 +6,7 @@ import com.hotel.app.repository.HotelRepo;
 
 import com.hotel.app.model.Hotel;
 import com.hotel.app.views.Booking;
+import com.hotel.app.views.BookingView;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -38,26 +39,26 @@ public class HotelServiceImpl implements HotelService {
 
 
     @Override
-    public List<Booking> listBookings(String userId) {
-        return List.of(new Booking(idGenerator.generate(), "1", "Taj", 10));
+    public List<BookingView> listBookings(String userId) {
+        return bookingRepo.findAllByUserId(userId).stream().map(each -> each.view()).toList();
     }
 
     @Override
-    public Booking bookHotel(String userId, String hotelId, int roomsCount) {
+    public BookingView bookHotel(String userId, String hotelId, int roomsCount) {
 
-        Hotel hotel = hotelRepo.findById(String.valueOf(hotelId)).orElseThrow(()->new RuntimeException("Invalud id"));
+        Hotel hotel = hotelRepo.findById(String.valueOf(hotelId)).orElseThrow(()->new RuntimeException("Invalid id"));
 
+        Booking booking = new Booking(idGenerator.generate(), userId, hotelId, hotel.getName(), roomsCount);
 
-        Booking booking = new Booking(idGenerator.generate(), hotelId, hotel.getName(), roomsCount);
         bookingRepo.save(booking);
-        return booking;
+        return booking.view();
     }
 
     @Override
     public byte[] getReceiptData(String bookingId, String userId) {
-        // validate userId to booking
+        Booking booking = bookingRepo.findById(bookingId).orElseThrow(() -> new RuntimeException("Invalid Booking id"));
 
-        String content = "Receipt for %s".formatted(bookingId);
+        String content = "Receipt for %s".formatted(booking.toString());
         return content.getBytes(StandardCharsets.UTF_8);
     }
 }

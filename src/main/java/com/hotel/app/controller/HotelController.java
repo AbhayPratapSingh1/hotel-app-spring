@@ -4,6 +4,7 @@ import com.hotel.app.model.Hotel;
 import com.hotel.app.views.Booking;
 import com.hotel.app.services.HotelService;
 import com.hotel.app.views.BookingRequest;
+import com.hotel.app.views.BookingView;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class HotelController {
     @GetMapping("/bookings")
     public ResponseEntity<?> listBookings() {
         String userId = "1";
-        List<Booking> bookings = hotelService.listBookings(userId);
+        List<BookingView> bookings = hotelService.listBookings(userId);
         return ResponseEntity.ok(bookings);
     }
 
@@ -44,8 +45,8 @@ public class HotelController {
         int hotelId = bookingRequest.hotel_id();
         System.out.println(hotelId);
         String userId = "1";
-        Booking booking = hotelService.bookHotel(userId, String.valueOf(hotelId), bookingRequest.rooms());
-        return ResponseEntity.ok(booking);
+        BookingView bookingView = hotelService.bookHotel(userId, String.valueOf(hotelId), bookingRequest.rooms());
+        return ResponseEntity.ok(bookingView);
     }
 
     @GetMapping("/bookings/{bookingId}/{fileName}")

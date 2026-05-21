@@ -38,9 +38,9 @@ class HotelControllerTest {
 
         when(idGenerator.generate()).thenReturn("1", "2", "3");
 
-        Booking booking = new Booking("1", "1", "hotel", 1);
+        Booking booking = new Booking("1", "1","1", "hotel", 1);
 
-        when(bookingService.listBookings("1")).thenReturn(List.of(booking));
+        when(bookingService.listBookings("1")).thenReturn(List.of(booking.view()));
 
         client.get()
                 .uri("/api/bookings")

@@ -13,6 +13,17 @@ public class Hotel {
     private final String city;
     private final int rooms;
 
+    public String getHotelId() {
+        return hotelId;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public int getRooms() {
+        return rooms;
+    }
 
     public Hotel(String hotelId, String name, String city, int rooms) {
         this.hotelId = hotelId;
