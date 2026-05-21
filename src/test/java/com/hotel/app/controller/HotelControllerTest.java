@@ -1,7 +1,9 @@
 package com.hotel.app.controller;
 
-import com.hotel.app.model.Hotel;import com.hotel.app.views.Booking;
+import com.hotel.app.model.Hotel;
+import com.hotel.app.views.Booking;
 import com.hotel.app.services.HotelService;
+import com.hotel.app.views.BookingRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -12,7 +14,8 @@ import org.springframework.test.web.servlet.client.RestTestClient;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -24,6 +27,8 @@ class HotelControllerTest {
 
     @MockitoBean
     private HotelService bookingService;
+    @Autowired
+    private HotelService hotelService;
 
     @Test
     void listBookingsShouldReturnListOfBookings() {
@@ -64,4 +69,22 @@ class HotelControllerTest {
                 .expectBody(List.class)
                 .returnResult();
     }
+
+    @Test
+    void bookHotelShouldBookAHotelForUserAndUpdateData() {
+        Booking booking = new Booking("1", "Taj", 12);
+        when(hotelService.bookHotel("1",1)).thenReturn(booking);
+
+        Booking response = client.post()
+                .uri("/api/bookings")
+                .body(new BookingRequest(1, 1))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Booking.class)
+                .returnResult()
+                .getResponseBody();
+
+        assertEquals(booking, response);
+    }
+
 }

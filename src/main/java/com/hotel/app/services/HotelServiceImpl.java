@@ -27,7 +27,7 @@ public class HotelServiceImpl implements HotelService {
     public List<Booking> listBookings(String userId) {
         return List.of(new Booking("1", "Taj", 10));
     }
-
+    @Override
     public Booking bookHotel(String hotelId, int roomsCount) {
         List<Hotel> hotels = listHotels();
         Hotel hotel = hotels.stream().filter(h -> h.matchId(hotelId)).toList().get(0);

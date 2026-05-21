@@ -10,4 +10,6 @@ public interface HotelService {
 
     List<Hotel> listHotelsWithCityName(String city);
     List<Booking> listBookings(String userId);
+
+    Booking bookHotel(String hotelId, int rooms);
 }
