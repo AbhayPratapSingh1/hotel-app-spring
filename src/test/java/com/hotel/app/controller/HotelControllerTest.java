@@ -95,5 +95,4 @@ class HotelControllerTest {
 
         assertEquals(booking, response);
     }
-
 }

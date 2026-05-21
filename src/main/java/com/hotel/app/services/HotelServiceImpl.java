@@ -4,6 +4,7 @@ import com.hotel.app.model.Hotel;
 import com.hotel.app.views.Booking;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -38,5 +39,13 @@ public class HotelServiceImpl implements HotelService {
         List<Hotel> hotels = listHotels();
         Hotel hotel = hotels.stream().filter(h -> h.matchId(hotelId)).toList().get(0);
         return new Booking(idGenerator.generate(),hotelId, hotel.getName(), roomsCount);
+    }
+
+    @Override
+    public byte[] getReceiptData(String bookingId, String userId) {
+        // validate userId to booking
+
+        String content = "Receipt for %s".formatted(bookingId);
+        return content.getBytes(StandardCharsets.UTF_8);
     }
 }

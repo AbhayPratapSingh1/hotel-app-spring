@@ -12,4 +12,6 @@ public interface HotelService {
     List<Booking> listBookings(String userId);
 
     Booking bookHotel(String hotelId, int rooms);
+
+    byte[] getReceiptData(String bookingId, String userId);
 }
