@@ -1,10 +1,8 @@
 package com.hotel.app.services;
 
+import com.hotel.app.model.Hotel;
 import com.hotel.app.repository.BookingRepo;
 import com.hotel.app.repository.HotelRepo;
-
-
-import com.hotel.app.model.Hotel;
 import com.hotel.app.views.Booking;
 import com.hotel.app.views.BookingView;
 import org.springframework.stereotype.Service;
@@ -46,7 +44,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public BookingView bookHotel(String userId, String hotelId, int roomsCount) {
 
-        Hotel hotel = hotelRepo.findById(String.valueOf(hotelId)).orElseThrow(()->new RuntimeException("Invalid id"));
+        Hotel hotel = hotelRepo.findById(String.valueOf(hotelId)).orElseThrow(() -> new RuntimeException("Invalid id"));
 
         Booking booking = new Booking(idGenerator.generate(), userId, hotelId, hotel.getName(), roomsCount);
 
@@ -57,7 +55,9 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public byte[] getReceiptData(String bookingId, String userId) {
         Booking booking = bookingRepo.findById(bookingId).orElseThrow(() -> new RuntimeException("Invalid Booking id"));
-
+        if (!booking.getUserId().equals(userId)) {
+            throw new RuntimeException("Not your booking");
+        }
         String content = "Receipt for %s".formatted(booking.toString());
         return content.getBytes(StandardCharsets.UTF_8);
     }

@@ -6,7 +6,6 @@ import com.hotel.app.views.RegisterRequest;
 import com.hotel.app.views.User;
 import com.hotel.app.views.UserDetails;
 import com.hotel.app.views.loginRequest;
-import org.apache.tomcat.util.net.openssl.ciphers.Encryption;
 import org.springframework.stereotype.Service;
 
 
@@ -23,9 +22,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDetails validate(loginRequest loginRequest) throws InvalidCredential {
         User user = userRepository.findUserByUsername(loginRequest.username());
+
         boolean valid = user.validate(loginRequest.password());
         if(!valid) throw new InvalidCredential("Password and username did not match");
-        return new UserDetails("2",loginRequest.username());
+        return user.details();
     }
 
     @Override

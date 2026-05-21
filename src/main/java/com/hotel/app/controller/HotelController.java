@@ -9,6 +9,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class HotelController {
     }
 
     @GetMapping("/bookings")
-    public ResponseEntity<?> listBookings() {
-        String userId = "1";
+    public ResponseEntity<?> listBookings( Authentication auth) {
+        String userId = auth.getName();
         List<BookingView> bookings = hotelService.listBookings(userId);
         return ResponseEntity.ok(bookings);
     }
@@ -41,17 +42,16 @@ public class HotelController {
     }
 
     @PostMapping("/bookings")
-    public ResponseEntity<?> bookHotel(@RequestBody BookingRequest bookingRequest) {
+    public ResponseEntity<?> bookHotel(@RequestBody BookingRequest bookingRequest, Authentication auth) {
         int hotelId = bookingRequest.hotel_id();
-        System.out.println(hotelId);
-        String userId = "1";
+        String userId = auth.getName();
         BookingView bookingView = hotelService.bookHotel(userId, String.valueOf(hotelId), bookingRequest.rooms());
         return ResponseEntity.ok(bookingView);
     }
 
     @GetMapping("/bookings/{bookingId}/{fileName}")
-    public ResponseEntity<?> downLoadReceipt(@PathVariable String bookingId, @PathVariable String fileName) {
-        String userId = "1";
+    public ResponseEntity<?> downLoadReceipt(@PathVariable String bookingId, @PathVariable String fileName, Authentication auth) {
+        String userId = auth.getName();
         byte[] receiptData = hotelService.getReceiptData(bookingId, userId);
         ByteArrayResource resource = new ByteArrayResource(receiptData);
 
