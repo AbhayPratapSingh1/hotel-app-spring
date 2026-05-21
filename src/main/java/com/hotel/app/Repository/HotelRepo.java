@@ -8,8 +8,5 @@ import java.util.List;
 
 @Repository
 public interface HotelRepo extends MongoRepository< Hotel, String> {
-
-
     List<Hotel> findAllByCity(String city);
-
 }
