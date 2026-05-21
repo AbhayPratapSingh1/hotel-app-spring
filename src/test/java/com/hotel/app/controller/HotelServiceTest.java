@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HotelServiceImplTest {
     @Test
     @Description("Should return the list of hotels")
-    void listHotels() {
+    void listHotelsWithCityName() {
         HotelServiceImpl hotelService = new HotelServiceImpl();
         List<Hotel> hotels = hotelService.listHotels();
         List<Hotel> expectedHotels = List.of(
@@ -40,7 +40,7 @@ class HotelServiceImplTest {
     @Description("Should return the list of Hotels with given city")
     void listSearchedHotels() {
         HotelServiceImpl hotelService = new HotelServiceImpl();
-        List<Hotel> hotels = hotelService.listHotelsWithCity("New York");
+        List<Hotel> hotels = hotelService.listHotelsWithCityName("New York");
         List<Hotel> expectedHotels = List.of(
                 new Hotel("1", "Taj","New York", 10)
         );
