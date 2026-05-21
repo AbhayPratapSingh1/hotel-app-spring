@@ -8,8 +8,8 @@ import java.util.List;
 
 @Service
 public class HotelServiceImpl implements HotelService {
-
-    public List<Hotel> listHotels() {
+    @Override
+    public List<Hotel> listHotels(String city) {
         return List.of(
                 new Hotel("1", "Taj","New York", 10),
                 new Hotel("2", "Shrinivasna", "India", 20)

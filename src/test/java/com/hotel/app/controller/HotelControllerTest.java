@@ -1,6 +1,6 @@
 package com.hotel.app.controller;
 
-import com.hotel.app.views.Booking;
+import com.hotel.app.model.Hotel;import com.hotel.app.views.Booking;
 import com.hotel.app.services.HotelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.client.RestTestClient;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.anyString;import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -33,6 +33,19 @@ class HotelControllerTest {
 
         client.get()
                 .uri("/api/bookings")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(List.class)
+                .returnResult();
+    }
+
+    @Test
+    void listHotelsShouldReturnListOfTheHotelsOfTheHotel() {
+        Hotel hotel = new Hotel("1","Taj", "New York", 10);
+        when(bookingService.listHotels(anyString())).thenReturn(List.of(hotel));
+
+        client.get()
+                .uri("/api/search/hotels?city=New%20York")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class)

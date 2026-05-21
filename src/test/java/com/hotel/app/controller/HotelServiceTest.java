@@ -15,7 +15,7 @@ class HotelServiceImplTest {
     @Description("Should return the list of hotels")
     void listHotels() {
         HotelServiceImpl hotelService = new HotelServiceImpl();
-        List<Hotel> hotels = hotelService.listHotels();
+        List<Hotel> hotels = hotelService.listHotels("");
         List<Hotel> expectedHotels = List.of(
                 new Hotel("1", "Taj","New York", 10),
                 new Hotel("2", "Shrinivasna", "India", 20)
