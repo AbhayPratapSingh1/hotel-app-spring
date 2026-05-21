@@ -9,9 +9,10 @@ public interface HotelService {
     List<Hotel> listHotels();
 
     List<Hotel> listHotelsWithCityName(String city);
+
     List<Booking> listBookings(String userId);
 
-    Booking bookHotel(String hotelId, int rooms);
-
     byte[] getReceiptData(String bookingId, String userId);
+
+    Booking bookHotel(String userId, int hotelId, int rooms);
 }

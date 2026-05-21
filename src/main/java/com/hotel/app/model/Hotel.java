@@ -1,16 +1,20 @@
 package com.hotel.app.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Objects;
 
+@Document
 public class Hotel {
-    private final String hotelId;
+    @Id
+    private final int hotelId;
     private final String name;
     private final String city;
     private final int rooms;
 
 
-
-    public Hotel(String hotelId, String name, String city, int rooms) {
+    public Hotel(int hotelId, String name, String city, int rooms) {
         this.hotelId = hotelId;
         this.name = name;
         this.city = city;
@@ -38,7 +42,7 @@ public class Hotel {
         return this.name;
     }
 
-    public boolean matchId(String hotelId) {
-        return  hotelId.equals(this.hotelId);
+    public boolean matchId(int hotelId) {
+        return hotelId == this.hotelId;
     }
 }

@@ -41,8 +41,10 @@ public class HotelController {
 
     @PostMapping("/bookings")
     public ResponseEntity<?> bookHotel(@RequestBody BookingRequest bookingRequest) {
-        String hotelId = String.valueOf(bookingRequest.hotel_id());
-        Booking booking = hotelService.bookHotel(hotelId, bookingRequest.rooms());
+        int hotelId = bookingRequest.hotel_id();
+
+        String userId = "1";
+        Booking booking = hotelService.bookHotel(userId, hotelId, bookingRequest.rooms());
         return ResponseEntity.ok(booking);
     }
 

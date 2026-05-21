@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 class HotelControllerTest {
 
 
-
     @Autowired
     private RestTestClient client;
 
@@ -40,7 +39,7 @@ class HotelControllerTest {
 
         when(idGenerator.generate()).thenReturn("1", "2", "3");
 
-        Booking booking = new Booking("1","1","hotel", 1);
+        Booking booking = new Booking("1", 1, "hotel", 1);
 
         when(bookingService.listBookings("1")).thenReturn(List.of(booking));
 
@@ -54,7 +53,7 @@ class HotelControllerTest {
 
     @Test
     void listHotelsShouldReturnListOfTheHotelsOfTheCityIfProvided() {
-        Hotel hotel = new Hotel("1","Taj", "New York", 10);
+        Hotel hotel = new Hotel(1, "Taj", "New York", 10);
         when(bookingService.listHotelsWithCityName(anyString())).thenReturn(List.of(hotel));
 
         client.get()
@@ -67,7 +66,7 @@ class HotelControllerTest {
 
     @Test
     void listHotelsShouldReturnListOfAllTheHotelsIfCityNotProvided() {
-        Hotel hotel = new Hotel("1","Taj", "New York", 10);
+        Hotel hotel = new Hotel(1, "Taj", "New York", 10);
         when(bookingService.listHotels()).thenReturn(List.of(hotel));
 
         client.get()
@@ -81,8 +80,8 @@ class HotelControllerTest {
     @Test
     void bookHotelShouldBookAHotelForUserAndUpdateData() {
         when(idGenerator.generate()).thenReturn("1", "2", "3");
-        Booking booking = new Booking("1","1", "Taj", 12);
-        when(hotelService.bookHotel("1",1)).thenReturn(booking);
+        Booking booking = new Booking("1", 1, "Taj", 12);
+        when(hotelService.bookHotel("1", 1, 1)).thenReturn(booking);
 
         Booking response = client.post()
                 .uri("/api/bookings")
