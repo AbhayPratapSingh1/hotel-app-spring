@@ -1,11 +1,14 @@
 package com.hotel.app.services;
 
-import com.hotel.app.Repository.BookingRepo;
-import com.hotel.app.Repository.HotelRepo;
+import com.hotel.app.repository.BookingRepo;
+import com.hotel.app.repository.HotelRepo;
+
+
 import com.hotel.app.model.Hotel;
 import com.hotel.app.views.Booking;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
@@ -48,5 +51,13 @@ public class HotelServiceImpl implements HotelService {
         Booking booking = new Booking(idGenerator.generate(), hotelId, hotel.getName(), roomsCount);
         bookingRepo.save(booking);
         return booking;
+    }
+
+    @Override
+    public byte[] getReceiptData(String bookingId, String userId) {
+        // validate userId to booking
+
+        String content = "Receipt for %s".formatted(bookingId);
+        return content.getBytes(StandardCharsets.UTF_8);
     }
 }

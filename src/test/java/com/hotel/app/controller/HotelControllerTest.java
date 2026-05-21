@@ -4,7 +4,7 @@ import com.hotel.app.model.Hotel;
 import com.hotel.app.services.HotelService;
 import com.hotel.app.services.IdGenerator;
 import com.hotel.app.views.Booking;
-import com.hotel.app.views.BookingRequest;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.client.RestTestClient;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
