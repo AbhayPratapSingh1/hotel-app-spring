@@ -28,4 +28,9 @@ public class Hotel {
     public int hashCode() {
         return Objects.hash(hotel_id, name, city, rooms);
     }
+
+
+    public boolean matchCity(String cityToSearch) {
+        return this.city.equals(cityToSearch);
+    }
 }

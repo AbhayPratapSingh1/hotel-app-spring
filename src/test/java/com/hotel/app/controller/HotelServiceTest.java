@@ -36,16 +36,15 @@ class HotelServiceImplTest {
     }
 
 
-    //    @Test
-//    @Description("Should return the list of Hotels with given city")
-//    void listSearchedHotels() {
-//        HotelServiceImpl hotelService = new HotelServiceImpl();
-//        List<Hotel> hotels = hotelService.listHotelsWithCity("");
-//        List<Hotel> expectedHotels = List.of(
-//                new Hotel("1", "Taj","New York", 10),
-//                new Hotel("2", "Shrinivasna", "India", 20)
-//        );
-//
-//        assertEquals(expectedHotels,hotels);
-//    }
+    @Test
+    @Description("Should return the list of Hotels with given city")
+    void listSearchedHotels() {
+        HotelServiceImpl hotelService = new HotelServiceImpl();
+        List<Hotel> hotels = hotelService.listHotelsWithCity("New York");
+        List<Hotel> expectedHotels = List.of(
+                new Hotel("1", "Taj","New York", 10)
+        );
+
+        assertEquals(expectedHotels,hotels);
+    }
 }

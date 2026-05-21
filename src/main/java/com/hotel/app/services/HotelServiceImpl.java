@@ -9,6 +9,8 @@ import java.util.List;
 @Service
 public class HotelServiceImpl implements HotelService {
 
+
+
     public List<Hotel> listHotels() {
         return List.of(
                 new Hotel("1", "Taj","New York", 10),
@@ -19,5 +21,12 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public List<Booking> listBookings(String userId) {
         return List.of(new Booking("1", "Taj", 10));
+    }
+
+    public List<Hotel> listHotelsWithCity(String s) {
+        List<Hotel> hotels = listHotels();
+
+        return hotels.stream().filter(h -> h.matchCity(s)).toList();
+
     }
 }
