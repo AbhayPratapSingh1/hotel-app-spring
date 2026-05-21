@@ -8,13 +8,13 @@ import java.util.List;
 
 @Service
 public class HotelServiceImpl implements HotelService {
-
     private final IdGenerator idGenerator;
 
     public HotelServiceImpl(IdGenerator idGenerator) {
         this.idGenerator = idGenerator;
     }
 
+    @Override
     public List<Hotel> listHotels() {
         return List.of(
                 new Hotel("1", "Taj","New York", 10),
@@ -33,7 +33,7 @@ public class HotelServiceImpl implements HotelService {
     public List<Booking> listBookings(String userId) {
         return List.of(new Booking(idGenerator.generate(),"1", "Taj", 10));
     }
-
+    @Override
     public Booking bookHotel(String hotelId, int roomsCount) {
         List<Hotel> hotels = listHotels();
         Hotel hotel = hotels.stream().filter(h -> h.matchId(hotelId)).toList().get(0);
