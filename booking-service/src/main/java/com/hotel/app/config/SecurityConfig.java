@@ -25,8 +25,6 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register").permitAll()
-                        .requestMatchers("/api/users/login").permitAll()
                         .requestMatchers("/api/search/hotels").permitAll()
                         .anyRequest().authenticated()
                 )
