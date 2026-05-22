@@ -1,4 +1,12 @@
 package com.hotel.app.views;
 
-public record HotelDetails(String hotelId, String name, String city, int rooms) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record HotelDetails(
+        @JsonProperty("_id")
+        String id,
+        String name,
+        String city,
+        int rooms
+) {
 }

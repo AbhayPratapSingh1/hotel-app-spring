@@ -4,7 +4,9 @@ services:
     deploy:
       replicas: 1
     environment:
+      - SEARCH_URI=http://hotel-app-search:8080
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
+      - JWT_SECRET=9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d
     depends_on:
       - mongodb
 
@@ -13,8 +15,8 @@ services:
     deploy:
       replicas: 1
     environment:
-      - SEARCH_URI=http://hotel-app-search:8080
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
+      - JWT_SECRET=9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d
     depends_on:
       - mongodb
 
@@ -24,9 +26,9 @@ services:
       replicas: 1
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
+      - JWT_SECRET=9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d
     depends_on:
       - mongodb
-
 
   mongodb:
     image: mongo:latest

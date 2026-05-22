@@ -25,7 +25,8 @@ try {
 
 const db = client.db();
 
-const JWT_SECRET = "9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d";
+const JWT_SECRET =
+  Deno.env.get("JWT_SECRET") || "9aaskdljflaksjdflkajsdlfkjasclanslasdflk";
 
 export const createApp = async () => {
   await client.connect();
@@ -44,27 +45,27 @@ export const createApp = async () => {
     const city = await c.req.query("city");
 
     if (city == null) {
-      const hotels = await userCollection.find().toArray()
+      const hotels = await userCollection.find().toArray();
       return c.json(hotels);
     }
 
-    const hotels = await userCollection.find({ city: city }).toArray()
+    const hotels = await userCollection.find({ city: city }).toArray();
     return c.json(hotels);
   });
 
   app.get("/api/internal/book/:id", async (c) => {
     const id = await c.req.param("id");
 
-    const hotel = await userCollection.findOne({ _id: id })
+    const hotel = await userCollection.findOne({ _id: id });
 
     const count = hotel.rooms - 1;
-    console.log(hotel)
-    await userCollection.updateOne({ _id: id }, { "$set": { "rooms": count } });
+    console.log(hotel);
+    await userCollection.updateOne({ _id: id }, { $set: { rooms: count } });
 
     const updatedDetails = await userCollection.findOne({ _id: id });
     console.log(updatedDetails);
 
-    return c.json({ hotel: updatedDetails });
+    return c.json(updatedDetails);
   });
 
   return app;

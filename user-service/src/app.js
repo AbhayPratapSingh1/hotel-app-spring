@@ -25,7 +25,8 @@ try {
 
 const db = client.db();
 
-const JWT_SECRET = "9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d";
+const JWT_SECRET =
+  Deno.env.get("JWT_SECRET") || "9aaskdljflaksjdflkajsdlfkjasclanslasdflk";
 
 export const createApp = async () => {
   await client.connect();

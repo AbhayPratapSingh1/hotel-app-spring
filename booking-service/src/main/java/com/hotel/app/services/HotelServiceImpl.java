@@ -6,6 +6,7 @@ import com.hotel.app.repository.HotelRepo;
 import com.hotel.app.views.Booking;
 import com.hotel.app.views.BookingView;
 import com.hotel.app.views.HotelDetails;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -16,19 +17,21 @@ import java.util.List;
 @Service
 public class HotelServiceImpl implements HotelService {
     private final IdGenerator idGenerator;
-    private final HotelRepo hotelRepo;
     private final BookingRepo bookingRepo;
 
-    @Value("${SEARCH_URI}")
+    @Value("${security.uri.search-uri}")
     private String searchUri;
 
-    public HotelServiceImpl(IdGenerator idGenerator, HotelRepo hotelRepo, BookingRepo bookingRepo) {
-        this.idGenerator = idGenerator;
-        this.hotelRepo = hotelRepo;
-        this.bookingRepo = bookingRepo;
+    @PostConstruct
+    void Something(){
+        System.out.println("\n\n\n\n\n\n\n " + searchUri);
+        System.out.println(System.getenv("SEARCH_URI"));
+        System.out.println("\n\n\n\n\n\n\n " );
+    }
 
-        hotelRepo.save(new Hotel("1", "Taj Hotels", "New York", 10));
-        hotelRepo.save(new Hotel("2", "Srinivasan", "Bangalore", 10));
+    public HotelServiceImpl(IdGenerator idGenerator, BookingRepo bookingRepo) {
+        this.idGenerator = idGenerator;
+        this.bookingRepo = bookingRepo;
     }
 
     @Override
@@ -40,7 +43,9 @@ public class HotelServiceImpl implements HotelService {
     public BookingView bookHotel(String userId, String hotelId, int roomsCount) {
 
         RestClient restClient = RestClient.create();
+        System.out.println(restClient.get().uri("%s/api/internal/book/%s".formatted(searchUri, hotelId)).retrieve());
         HotelDetails hotelDetails = restClient.get().uri("%s/api/internal/book/%s".formatted(searchUri, hotelId)).retrieve().body(HotelDetails.class);
+
         Booking booking = new Booking(idGenerator.generate(), userId, hotelId, hotelDetails.name(), roomsCount);
 
         bookingRepo.save(booking);
