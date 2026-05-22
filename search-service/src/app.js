@@ -58,9 +58,13 @@ export const createApp = async () => {
     const hotel = await userCollection.findOne({ _id: id })
 
     const count = hotel.rooms - 1;
-    await userCollection.findOneAndUpdate({ _id: id }, { "$set": { "rooms": count } });
+    console.log(hotel)
+    await userCollection.updateOne({ _id: id }, { "$set": { "rooms": count } });
 
-    return c.json({ status: "success" });
+    const updatedDetails = await userCollection.findOne({ _id: id });
+    console.log(updatedDetails);
+
+    return c.json({ hotel: updatedDetails });
   });
 
   return app;
