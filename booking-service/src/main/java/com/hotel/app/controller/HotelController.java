@@ -24,8 +24,16 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
+
+    @GetMapping("/")
+    public ResponseEntity<?> listBookings() {
+
+        return ResponseEntity.ok("Hello");
+    }
+
+
     @GetMapping("/bookings")
-    public ResponseEntity<?> listBookings( Authentication auth) {
+    public ResponseEntity<?> listBookings(Authentication auth) {
         String userId = auth.getName();
         List<BookingView> bookings = hotelService.listBookings(userId);
         return ResponseEntity.ok(bookings);

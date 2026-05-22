@@ -1,9 +1,12 @@
-import { Hono } from "hono"
+import { Hono } from "hono";
 import { MongoClient } from "mongodb";
-import { logger } from "hono/logger"
+import { logger } from "hono/logger";
+import { cors } from "hono/cors";
 import jwt from "jsonwebtoken";
 
-const uri = Deno.env.get("SPRING_DATA_MONGODB_URI") || "mongodb://localhost:27017/hotel-db"
+const uri =
+  Deno.env.get("SPRING_DATA_MONGODB_URI") ||
+  "mongodb://localhost:27017/hotel-db";
 const client = new MongoClient(uri);
 
 try {
@@ -20,10 +23,9 @@ try {
   await client.close();
 }
 
-
 const db = client.db();
 
-const JWT_SECRET = "9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d"
+const JWT_SECRET = "9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d";
 
 export const createApp = async () => {
   await client.connect();
@@ -31,20 +33,20 @@ export const createApp = async () => {
 
   const userCollection = await db.collection("user");
 
-
   app.use(logger());
+  app.use(cors({ origin: "*", credentials: true }));
 
   app.get("/", (c) => {
-    return c.text("hello form user service")
-  })
+    return c.text("hello form user service");
+  });
 
   app.post("/api/users/register", async (c) => {
     const { username, password } = await c.req.json();
 
-    userCollection.insertOne({ username, password })
+    userCollection.insertOne({ username, password });
 
-    return c.json({ status: "success" })
-  })
+    return c.json({ status: "success" });
+  });
 
   app.post("/api/users/login", async (c) => {
     const { username, password } = await c.req.json();
@@ -57,14 +59,12 @@ export const createApp = async () => {
 
     const token = createToken(usersDetails._id);
 
-    return c.json({ token })
-  })
-
-
+    return c.json({ token });
+  });
 
   return app;
-}
+};
 
 const createToken = (userId) => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
-}
+};
