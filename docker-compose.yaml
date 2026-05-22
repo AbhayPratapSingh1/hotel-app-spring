@@ -1,6 +1,9 @@
 services:
   hotel-app:
     build: .
+    deploy:
+      replicas:
+        5
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
     depends_on:
