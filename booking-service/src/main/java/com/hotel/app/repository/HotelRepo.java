@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface HotelRepo extends MongoRepository< Hotel, String> {
-
     List<Hotel> findAllByCity(String city);
 }

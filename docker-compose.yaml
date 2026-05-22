@@ -13,9 +13,20 @@ services:
     deploy:
       replicas: 1
     environment:
+      - SEARCH_URI=http://hotel-app-search:8080
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
     depends_on:
       - mongodb
+
+  hotel-app-search:
+    build: ./search-service
+    deploy:
+      replicas: 1
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
+    depends_on:
+      - mongodb
+
 
   mongodb:
     image: mongo:latest

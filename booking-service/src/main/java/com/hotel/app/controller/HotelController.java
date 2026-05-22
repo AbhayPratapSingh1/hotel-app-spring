@@ -24,29 +24,17 @@ public class HotelController {
         this.hotelService = hotelService;
     }
 
-
     @GetMapping("/")
     public ResponseEntity<?> listBookings() {
 
         return ResponseEntity.ok("Hello");
     }
 
-
     @GetMapping("/bookings")
     public ResponseEntity<?> listBookings(Authentication auth) {
         String userId = auth.getName();
         List<BookingView> bookings = hotelService.listBookings(userId);
         return ResponseEntity.ok(bookings);
-    }
-
-    @GetMapping("/search/hotels")
-    public ResponseEntity<?> ListHotelsOfCity(@RequestParam(required = false) String city) {
-        if(city == null){
-            return ResponseEntity.ok(hotelService.listHotels());
-        }
-
-        List<Hotel> hotels = hotelService.listHotelsWithCityName(city);
-        return ResponseEntity.ok(hotels);
     }
 
     @PostMapping("/bookings")
