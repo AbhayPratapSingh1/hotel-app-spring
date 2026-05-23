@@ -1,4 +1,4 @@
-const EXPIRY_TIME = 30;
+const EXPIRY_TIME = 10;
 
 export class CacheManager {
   constructor(client) {
@@ -7,10 +7,7 @@ export class CacheManager {
 
   async setHotelsCache(id, hotelDetails) {
 
-    console.log(id, hotelDetails);
-
     const key = `hotel-set-id:${id}`
-
     await this.client.set(key, JSON.stringify(hotelDetails), { EX: EXPIRY_TIME })
 
     console.log("Cache Stored", id);
@@ -27,6 +24,10 @@ export class CacheManager {
       console.log("\t\tCache Miss");
       return null;
     }
+
+    this.client.expire(key, EXPIRY_TIME, "XX")
+
+
     console.log("\t\tCache Hit");
 
     return hotelDetail

@@ -68,7 +68,7 @@ export const createApp = async (db, cacheManager) => {
     );
 
     cacheManager.invalidate("0");
-    console.log(updatedHotel);
+    console.log("Updated Hotel name:", updatedHotel.name);
 
     cacheManager.invalidate(updatedHotel.city);
 
