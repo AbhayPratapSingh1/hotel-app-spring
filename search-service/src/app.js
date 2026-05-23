@@ -1,35 +1,41 @@
 import { Hono } from "hono";
-import { MongoClient } from "mongodb";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
-import jwt from "jsonwebtoken";
-
-const uri =
-  Deno.env.get("SPRING_DATA_MONGODB_URI") ||
-  "mongodb://localhost:27017/hotel-db";
-const client = new MongoClient(uri);
-
-try {
-  await client.connect();
-  console.log("Connected to MongoDB successfully!");
-
-  const db = client.db("my_database");
-  const collection = db.collection("users");
-
-  await collection.insertOne({ name: "Alice", age: 30 });
-} catch (error) {
-  console.error("Connection error:", error);
-} finally {
-  await client.close();
+const delay = async (time) => {
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(1)
+    }, time)
+  })
 }
 
-const db = client.db();
+const getHotelsWithCity = async (city, userCollection, cacheManager) => {
+  const hotelsCache = await cacheManager.getHotelCache(city)
+  if (hotelsCache) {
+    return hotelsCache;
+  }
 
-const JWT_SECRET =
-  Deno.env.get("JWT_SECRET") || "9aaskdljflaksjdflkajsdlfkjasclanslasdflk";
+  await delay(3000)
+  const hotels = await userCollection.find({ city }).toArray();
+  cacheManager.setHotelsCache(city, hotels)
+  return hotels;
+}
 
-export const createApp = async () => {
-  await client.connect();
+
+const getHotels = async (userCollection, cacheManager) => {
+  const hotelsCache = await cacheManager.getHotelCache("0")
+  if (hotelsCache) {
+    return hotelsCache;
+  }
+  await delay(3000)
+  const hotels = await userCollection.find().toArray();
+
+  cacheManager.setHotelsCache("0", hotels)
+  return hotels;
+}
+
+
+export const createApp = async (db, cacheManager) => {
   const app = new Hono();
 
   const userCollection = await db.collection("hotel");
@@ -37,35 +43,36 @@ export const createApp = async () => {
   app.use(logger());
   app.use(cors({ origin: "*", credentials: true }));
 
-  app.get("/", (c) => {
-    return c.text("hello form user service");
-  });
+  app.get("/", (c) => c.text("hello form user service"));
 
   app.get("/api/search/hotels", async (c) => {
     const city = await c.req.query("city");
-
-    if (city == null) {
-      const hotels = await userCollection.find().toArray();
+    const cityKey = city == null ? "0" : city;
+    if (city) {
+      const hotels = await getHotelsWithCity(cityKey, userCollection, cacheManager);
       return c.json(hotels);
     }
 
-    const hotels = await userCollection.find({ city: city }).toArray();
+    const hotels = await getHotels(userCollection, cacheManager);
+
     return c.json(hotels);
   });
 
   app.get("/api/internal/book/:id", async (c) => {
     const id = await c.req.param("id");
 
-    const hotel = await userCollection.findOne({ _id: id });
+    const updatedHotel = await userCollection.findOneAndUpdate(
+      { _id: id, rooms: { $gt: 0 }, },
+      { $inc: { rooms: -1 }, },
+      { returnDocument: "after", }
+    );
 
-    const count = hotel.rooms - 1;
-    console.log(hotel);
-    await userCollection.updateOne({ _id: id }, { $set: { rooms: count } });
+    cacheManager.invalidate("0");
+    console.log("Updated Hotel name:", updatedHotel.name);
 
-    const updatedDetails = await userCollection.findOne({ _id: id });
-    console.log(updatedDetails);
+    cacheManager.invalidate(updatedHotel.city);
 
-    return c.json(updatedDetails);
+    return c.json(updatedHotel);
   });
 
   return app;
