@@ -1,15 +1,21 @@
 import { redisClient } from "./redis_connection.js";
 import { work } from "./work.js";
 
-const redisUri = Deno.env.get("REDIS_URI") || "redis://localhost:6379";
+const redisUri = Deno.env.get("REDIS_URI") || "redis://10.132.125.182:3000";
 const redisQueueName = Deno.env.get("RECEIPT_QUEUE") || "RECEIPT_QUEUE";
 
 const main = async () => {
   const redis = await redisClient(redisUri);
+
   while (true) {
-    const request = await redis.brPop(redisQueueName, 1000);
-    const booking = JSON.parse(request.element);
-    await work(booking);
+    console.log({ redisUri });
+    try {
+      const request = await redis.brPop(redisQueueName, 1000);
+      const booking = JSON.parse(request.element);
+      await work(booking);
+    } catch (e) {
+      console.error(e);
+    }
   }
 };
 
