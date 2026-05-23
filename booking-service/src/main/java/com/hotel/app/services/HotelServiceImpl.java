@@ -1,37 +1,35 @@
 package com.hotel.app.services;
 
-import com.hotel.app.model.Hotel;
 import com.hotel.app.repository.BookingRepo;
-import com.hotel.app.repository.HotelRepo;
 import com.hotel.app.views.Booking;
 import com.hotel.app.views.BookingView;
 import com.hotel.app.views.HotelDetails;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.RedisClient;
+import tools.jackson.databind.ObjectMapper;
 
+import java.lang.constant.ConstantDesc;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class HotelServiceImpl implements HotelService {
     private final IdGenerator idGenerator;
     private final BookingRepo bookingRepo;
+    private  final Jedis jedis;
+
 
     @Value("${security.uri.search-uri}")
     private String searchUri;
 
-    @PostConstruct
-    void Something(){
-        System.out.println("\n\n\n\n\n\n\n " + searchUri);
-        System.out.println(System.getenv("SEARCH_URI"));
-        System.out.println("\n\n\n\n\n\n\n " );
-    }
-
     public HotelServiceImpl(IdGenerator idGenerator, BookingRepo bookingRepo) {
         this.idGenerator = idGenerator;
         this.bookingRepo = bookingRepo;
+        this.jedis = new Jedis("localhost", 6379);
     }
 
     @Override
@@ -41,13 +39,12 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public BookingView bookHotel(String userId, String hotelId, int roomsCount) {
-
         RestClient restClient = RestClient.create();
-        System.out.println(restClient.get().uri("%s/api/internal/book/%s".formatted(searchUri, hotelId)).retrieve());
         HotelDetails hotelDetails = restClient.get().uri("%s/api/internal/book/%s".formatted(searchUri, hotelId)).retrieve().body(HotelDetails.class);
+        String bookingId = idGenerator.generate();
+        Booking booking = new Booking(bookingId, userId, hotelId, hotelDetails.name(), roomsCount);
 
-        Booking booking = new Booking(idGenerator.generate(), userId, hotelId, hotelDetails.name(), roomsCount);
-
+        jedis.lpush("BOOKING_QUEUE",booking.JsonString());
         bookingRepo.save(booking);
         return booking.view();
     }

@@ -2,7 +2,9 @@ package com.hotel.app.views;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tools.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 @Document
@@ -54,6 +56,18 @@ public final class Booking {
         return Objects.hash(id, hotelId, hotel, roomCount);
     }
 
+    public String JsonString(){
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        HashMap<String, String> details = new HashMap<>();
+        details.put("bookingId" , id);
+        details.put("userId", userId);
+        details.put("hotelId", hotelId);
+        details.put("hotelName", hotel);
+        details.put("roomCount", String.valueOf(roomCount));
+        return objectMapper.writeValueAsString(details);
+    }
+
     @Override
     public String toString() {
         return "Booking\n" +
@@ -70,5 +84,9 @@ public final class Booking {
 
     public BookingView view() {
         return new BookingView(this.id, this.userId, this.roomCount, this.hotel);
+    }
+
+    public String toJson() {
+        return "";
     }
 }
