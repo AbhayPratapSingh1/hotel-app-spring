@@ -59,11 +59,11 @@ public final class Booking {
         return Objects.hash(id, hotelId, hotel, roomCount);
     }
 
-    public String JsonString(){
+    public String JsonString() {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HashMap<String, String> details = new HashMap<>();
-        details.put("bookingId" , id);
+        details.put("bookingId", id);
         details.put("userId", userId);
         details.put("hotelId", hotelId);
         details.put("hotelName", hotel);
@@ -73,11 +73,12 @@ public final class Booking {
 
     @Override
     public String toString() {
-        return "Booking\n" +
-                "id        = " + id +
-                "\nhotelId   = " + hotelId +
-                "\nhotel     = " + hotel +
-                "\nroomCount = " + roomCount;
+        return "Booking :" +
+                "\n\tId             = " + id +
+                "\n\thotelId        = " + hotelId +
+                "\n\thotel          = " + hotel +
+                "\n\troomCount      = " + roomCount +
+                "\n\tBooking Receipt Status = " + status;
     }
 
 

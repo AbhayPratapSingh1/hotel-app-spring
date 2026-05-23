@@ -4,6 +4,7 @@ import com.hotel.app.repository.BookingRepo;
 import com.hotel.app.views.Booking;
 import com.hotel.app.views.BookingView;
 import com.hotel.app.views.HotelDetails;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -27,10 +28,14 @@ public class HotelServiceImpl implements HotelService {
     @Value("${security.uri.search-uri}")
     private String searchUri;
 
-    public HotelServiceImpl(IdGenerator idGenerator, BookingRepo bookingRepo) {
+
+    @Value("${security.key.booking-queue}")
+    private String bookingQueue;
+
+    public HotelServiceImpl(IdGenerator idGenerator, BookingRepo bookingRepo,@Value("${security.uri.redis-uri}") String url) {
         this.idGenerator = idGenerator;
         this.bookingRepo = bookingRepo;
-        this.jedis = new Jedis("localhost", 6379);
+         this.jedis = new Jedis(url);
     }
 
     @Override
@@ -41,11 +46,14 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public BookingView bookHotel(String userId, String hotelId, int roomsCount) {
         RestClient restClient = RestClient.create();
+
         HotelDetails hotelDetails = restClient.get().uri("%s/api/internal/book/%s".formatted(searchUri, hotelId)).retrieve().body(HotelDetails.class);
+
         String bookingId = idGenerator.generate();
         Booking booking = new Booking(bookingId, userId, hotelId, hotelDetails.name(), roomsCount, Status.PENDING);
 
-        jedis.lpush("BOOKING_QUEUE",booking.JsonString());
+        jedis.lpush(bookingQueue, booking.JsonString());
+
         bookingRepo.save(booking);
         return booking.view();
     }

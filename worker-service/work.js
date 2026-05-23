@@ -1,3 +1,5 @@
+const bookingUrl = Deno.env.get("BOOKING_URI") || "http://localhost:8000";
+
 const delay = async (time) => {
   await new Promise((resolve) => {
     setTimeout(() => {
@@ -17,9 +19,9 @@ export const work = async (booking) => {
   console.log("recipt generated updating mo ngodb");
   await delay(5000);
   const res = await fetch(
-    `http://localhost:8000/api/bookings/update-status/${bookingId}`,
+    `${bookingUrl}/api/bookings/update-status/${bookingId}`,
     { method: "PATCH" },
   );
 
-  console.log(res);
+  console.log(res.url, res.status);
 };

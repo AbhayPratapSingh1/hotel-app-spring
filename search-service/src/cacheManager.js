@@ -39,7 +39,6 @@ export class CacheManager {
 
     console.log("clearing cache");
     await this.client.del(key);
-
   }
 }
 

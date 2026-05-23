@@ -4,19 +4,23 @@ services:
     deploy:
       replicas: 1
     environment:
-      - SEARCH_URI=http://hotel-app-search:8080
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
-      - JWT_SECRET=9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d
+      - SEARCH_URI=${SEARCH_URI}
+      - SPRING_DATA_MONGODB_URI=${MONGODB_URI}
+      - SPRING_DATA_REDIS_URI=${REDIS_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - RECEIPT_QUEUE=${REDIS_RECEIPT_QUEUE}
+
     depends_on:
       - mongodb
+      - redis
 
   hotel-app-users:
     build: ./user-service
     deploy:
       replicas: 1
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
-      - JWT_SECRET=9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d
+      - SPRING_DATA_MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb
 
@@ -25,16 +29,37 @@ services:
     deploy:
       replicas: 1
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/hotel-app
-      - JWT_SECRET=9a4f2c8oiuytrewd3ghye1f2a3b4c5d6e7f8a9b0c1d
+      - MONGODB_URI=${MONGODB_URI}
+      - REDIS_URI=${REDIS_URI}
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongodb
+      - redis
+
+  hotel-app-worker:
+    build: ./worker-service
+    deploy:
+      replicas: 1
+    environment:
+      - BOOKING_URI=${BOOKING_URI}
+      - REDIS_URI=${REDIS_URI}
+      - RECEIPT_QUEUE=${REDIS_RECEIPT_QUEUE}
+
+    volumes:
+      - recipts:/data/recipts
+
+    depends_on:
+      - redis
 
   mongodb:
     image: mongo:latest
     container_name: mongodb
     volumes:
       - mongo-data:/data/db
+
+  redis:
+    image: redis:latest
+    container_name: redis
 
   nginx:
     image: nginx:alpine
@@ -46,6 +71,8 @@ services:
     depends_on:
       - hotel-app-users
       - hotel-app-bookings
+      - hotel-app-worker
 
 volumes:
   mongo-data:
+  recipts:

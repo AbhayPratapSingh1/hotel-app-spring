@@ -1,10 +1,8 @@
 import { createClient } from "redis";
 
-
-export const redisClient = async () => {
-  const client = createClient({ url: "redis://localhost:6379" });
+export const redisClient = async (url) => {
+  const client = createClient({ url });
   await client.connect();
 
   return client;
-}
-
+};
