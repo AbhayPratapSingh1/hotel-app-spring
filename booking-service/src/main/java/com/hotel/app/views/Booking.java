@@ -1,5 +1,6 @@
 package com.hotel.app.views;
 
+import com.hotel.app.services.Status;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tools.jackson.databind.ObjectMapper;
@@ -15,13 +16,15 @@ public final class Booking {
     private final String hotelId;
     private final String hotel;
     private final int roomCount;
+    private final Status status;
 
-    public Booking(String id, String userId, String hotelId, String hotel, int roomCount) {
+    public Booking(String id, String userId, String hotelId, String hotel, int roomCount, Status status) {
         this.id = id;
         this.userId = userId;
         this.hotelId = hotelId;
         this.hotel = hotel;
         this.roomCount = roomCount;
+        this.status = status;
     }
 
     public String id() {
@@ -83,10 +86,14 @@ public final class Booking {
     }
 
     public BookingView view() {
-        return new BookingView(this.id, this.userId, this.roomCount, this.hotel);
+        return new BookingView(this.id, this.userId, this.roomCount, this.hotel, this.status);
     }
 
     public String toJson() {
         return "";
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

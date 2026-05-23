@@ -15,6 +15,7 @@ import java.lang.constant.ConstantDesc;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HotelServiceImpl implements HotelService {
@@ -42,7 +43,7 @@ public class HotelServiceImpl implements HotelService {
         RestClient restClient = RestClient.create();
         HotelDetails hotelDetails = restClient.get().uri("%s/api/internal/book/%s".formatted(searchUri, hotelId)).retrieve().body(HotelDetails.class);
         String bookingId = idGenerator.generate();
-        Booking booking = new Booking(bookingId, userId, hotelId, hotelDetails.name(), roomsCount);
+        Booking booking = new Booking(bookingId, userId, hotelId, hotelDetails.name(), roomsCount, Status.PENDING);
 
         jedis.lpush("BOOKING_QUEUE",booking.JsonString());
         bookingRepo.save(booking);
@@ -57,5 +58,10 @@ public class HotelServiceImpl implements HotelService {
         }
         String content = "Receipt for %s".formatted(booking.toString());
         return content.getBytes(StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public void updateStatus(String bookingId) {
+        bookingRepo.updateStatusById(bookingId, Status.COMPLETED);
     }
 }

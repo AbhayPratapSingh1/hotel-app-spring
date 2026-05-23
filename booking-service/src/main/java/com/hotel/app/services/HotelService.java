@@ -12,4 +12,5 @@ public interface HotelService {
 
     byte[] getReceiptData(String bookingId, String userId);
 
+    void updateStatus(String bookingId);
 }

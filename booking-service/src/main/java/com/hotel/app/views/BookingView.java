@@ -1,4 +1,6 @@
 package com.hotel.app.views;
 
-public record BookingView(String id , String userId, int roomCount, String name) {
+import com.hotel.app.services.Status;
+
+public record BookingView(String id , String userId, int roomCount, String name, Status status) {
 }

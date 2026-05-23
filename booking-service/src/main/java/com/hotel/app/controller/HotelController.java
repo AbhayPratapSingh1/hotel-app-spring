@@ -60,4 +60,11 @@ public class HotelController {
 
         return ResponseEntity.ok().headers(headers).body(resource);
     }
+
+    @PatchMapping("/bookings/update-status/{bookingId}")
+    public ResponseEntity<?> updateStatusOfBooking(@PathVariable String bookingId) {
+        hotelService.updateStatus(bookingId);
+        System.out.println("REQUEST CAME");
+        return ResponseEntity.ok().build();
+    }
 }

@@ -26,6 +26,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/search/hotels").permitAll()
+                        .requestMatchers("/api/bookings/update-status/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
