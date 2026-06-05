@@ -10,9 +10,9 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - RECEIPT_QUEUE=${REDIS_RECEIPT_QUEUE}
 
-    # depends_on:
-      # - mongodb
-      # - redis
+    depends_on:
+      - mongodb
+      - redis
 
   hotel-app-users:
     build: ./user-service
@@ -21,8 +21,8 @@ services:
     environment:
       - SPRING_DATA_MONGODB_URI=${MONGODB_URI}
       - JWT_SECRET=${JWT_SECRET}
-    # depends_on:
-      # - mongodb
+    depends_on:
+      - mongodb
 
   hotel-app-search:
     build: ./search-service
@@ -32,9 +32,9 @@ services:
       - MONGODB_URI=${MONGODB_URI}
       - REDIS_URI=${REDIS_URI}
       - JWT_SECRET=${JWT_SECRET}
-    # depends_on:
-      # - mongodb
-      # - redis
+    depends_on:
+      - mongodb
+      - redis
 
   hotel-app-worker:
     build: ./worker-service
@@ -48,18 +48,18 @@ services:
     volumes:
       - recipts:/data/recipts
 
-    # depends_on:
-    #   - redis
+    depends_on:
+      - redis
 
-  # mongodb:
-  #   image: mongo:latest
-  #   container_name: mongodb
-  #   volumes:
-  #     - mongo-data:/data/db
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - mongo-data:/data/db
 
-  # redis:
-  #   image: redis:latest
-  #   container_name: redis
+  redis:
+    image: redis:latest
+    container_name: redis
 
   nginx:
     image: nginx:alpine
@@ -70,9 +70,10 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - hotel-app-users
+      - hotel-app-search
       - hotel-app-bookings
       - hotel-app-worker
 
 volumes:
-  # mongo-data:
+  mongo-data:
   recipts:

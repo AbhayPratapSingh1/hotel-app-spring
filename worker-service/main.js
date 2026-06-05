@@ -1,7 +1,7 @@
 import { redisClient } from "./redis_connection.js";
 import { work } from "./work.js";
 
-const redisUri = Deno.env.get("REDIS_URI") || "redis://10.132.125.182:3000";
+const redisUri = Deno.env.get("REDIS_URI") || "redis://localhost:6379";
 const redisQueueName = Deno.env.get("RECEIPT_QUEUE") || "RECEIPT_QUEUE";
 
 const main = async () => {
